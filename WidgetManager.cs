@@ -59,9 +59,10 @@ public sealed class WidgetManager : IDisposable
         FileSystemEventHandler changed = (_, args) => System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
         {
             if (disposing) return;
+            if (args.ChangeType == WatcherChangeTypes.Changed && Directory.Exists(args.FullPath)) return;
             string relative = Path.GetRelativePath(WidgetsRoot, args.FullPath);
             string directory = relative.Split(Path.DirectorySeparatorChar)[0];
-            if (directory == "_shared" || !relative.Contains(Path.DirectorySeparatorChar)) reloadShared = true;
+            if (directory == "_shared") reloadShared = true;
             else changedWidgets.Add(directory);
             reloadTimer.Stop(); reloadTimer.Start();
         });

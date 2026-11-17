@@ -21,7 +21,7 @@ public partial class WidgetWindow : Window
     internal WidgetState State { get; }
     private nint handle;
     private HwndSource? source;
-    private bool disposed;
+    private bool disposed, browserInitializationStarted;
     private bool interactive;
     internal bool IsSleeping { get; private set; }
     private bool changingSleep, reloadAfterWake;
@@ -33,6 +33,9 @@ public partial class WidgetWindow : Window
     private OutlineDragSession? dragSession;
     private bool dragRequested;
     private int inputTraceCount;
+    internal int BrowserInitializationCount { get; private set; }
+    internal int BrowserReloadCount { get; private set; }
+    internal int BrowserNavigationCount { get; private set; }
     internal Task Initialization { get; private set; } = Task.CompletedTask;
     internal Task Reloading { get; private set; } = Task.CompletedTask;
     private readonly string virtualHost;
@@ -54,7 +57,11 @@ public partial class WidgetWindow : Window
         PreviewMouseMove += (_, _) => { if (dragSession != null && Win32Interop.GetCursorPos(out var cursor)) dragSession.Update(cursor, true); };
         PreviewMouseLeftButtonUp += (_, _) => FinishOutlineDrag(false);
         LostMouseCapture += (_, _) => { if (dragSession != null && Mouse.Captured != this && Mouse.Captured != Browser) FinishOutlineDrag(true); };
-        Loaded += (_, _) => Initialization = InitializeBrowser();
+        Loaded += (_, _) =>
+        {
+            if (browserInitializationStarted) return;
+            browserInitializationStarted = true; Initialization = InitializeBrowser();
+        };
         Closing += async (_, args) =>
         {
             if (Initialization.IsCompleted && Reloading.IsCompleted && SleepTransition.IsCompleted) { PrepareClose(); return; }
@@ -103,6 +110,7 @@ public partial class WidgetWindow : Window
     }
     private async Task InitializeBrowser()
     {
+        BrowserInitializationCount++;
         Capture();
         try
         {
@@ -133,7 +141,7 @@ public partial class WidgetWindow : Window
             }
             core.Settings.AreDefaultContextMenusEnabled = false;
             core.Settings.IsStatusBarEnabled = false;
-            core.NavigationStarting += (_, args) => { if (!IsLocal(args.Uri)) args.Cancel = true; else if (interactive) SetInteractive(false); };
+            core.NavigationStarting += (_, args) => { BrowserNavigationCount++; if (!IsLocal(args.Uri)) args.Cancel = true; else if (interactive) SetInteractive(false); };
             core.NewWindowRequested += (_, args) => args.Handled = true;
             core.PermissionRequested += (_, args) => args.State = CoreWebView2PermissionState.Deny;
             core.WebMessageReceived += MessageReceived;
@@ -361,6 +369,7 @@ public partial class WidgetWindow : Window
     }
     internal void Reload()
     {
+        BrowserReloadCount++;
         if (disposed || closeRequested || App.IsExiting || reloading || Browser.CoreWebView2 == null) return;
         if (IsSleeping) { reloadAfterWake = true; return; }
         Reloading = ReloadCore();

@@ -30,9 +30,9 @@ internal static class HostChecks
             state.Width = -1; Check(!state.IsValid(), "Reject invalid size");
             File.WriteAllBytes(Path.Combine(AppContext.BaseDirectory, "widgets", "world-clock", "background-test.gif"), Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"));
             manager = new WidgetManager(); manager.Restore();
-            if (Environment.GetCommandLineArgs().Contains("--image-sleep-only") || Environment.GetCommandLineArgs().Contains("--unified-only") || Environment.GetCommandLineArgs().Contains("--clipboard-only"))
+            if (Environment.GetCommandLineArgs().Contains("--image-sleep-only") || Environment.GetCommandLineArgs().Contains("--unified-only") || Environment.GetCommandLineArgs().Contains("--clipboard-only") || Environment.GetCommandLineArgs().Contains("--weather-only"))
             {
-                if (Environment.GetCommandLineArgs().Contains("--unified-only")) await UnifiedWidgetChecks.Run(manager); else if (Environment.GetCommandLineArgs().Contains("--clipboard-only")) await ClipboardResizeChecks.Run(manager); else await ImageSleepChecks.Run(manager); await manager.WaitForWindowsAsync(); manager.Dispose();
+                if (Environment.GetCommandLineArgs().Contains("--unified-only")) await UnifiedWidgetChecks.Run(manager); else if (Environment.GetCommandLineArgs().Contains("--weather-only")) await WeatherCardChecks.Run(manager); else if (Environment.GetCommandLineArgs().Contains("--clipboard-only")) await ClipboardResizeChecks.Run(manager); else await ImageSleepChecks.Run(manager); await manager.WaitForWindowsAsync(); manager.Dispose();
                 await App.ShutdownCompositionAsync(); File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "self-test.txt"), "PASS: targeted widget checks"); Application.Current.Shutdown(0); return;
             }
             var definitions = manager.Scan();

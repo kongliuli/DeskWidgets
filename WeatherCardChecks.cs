@@ -40,7 +40,9 @@ internal static class WeatherCardChecks
         async Task WaitFor(string expression, string reason)
         {
             for (int i = 0; i < 100; i++) { if (await Script(expression) == "true") return; await Task.Delay(50); }
-            throw new InvalidOperationException(reason);
+            string diagnostic = await Script("JSON.stringify({enabled:window.__cardEngine?.enabled,running:window.__cardEngine?.running,alpha:document.querySelector('.weather-card')?.style.getPropertyValue('--surface-alpha'),hidden:document.querySelector('.weather-card')?.dataset.backgroundHidden,surfaceOpacity:getComputedStyle(document.querySelector('.widget-surface')).opacity,visibility:getComputedStyle(document.querySelector('.widget-surface')).visibility,input:document.querySelector('[name=transparency]')?.value,cancelDisabled:document.querySelector('#cancel-appearance')?.disabled,dialogOpen:document.querySelector('#appearance-dialog')?.open,saved:localStorage.getItem('appearance'),pageHidden:document.hidden})");
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "weather-appearance-diagnostic.json"), diagnostic);
+            throw new InvalidOperationException(reason + "; initializationCount=" + window.BrowserInitializationCount + "; reloadCount=" + window.BrowserReloadCount + "; " + diagnostic);
         }
         async Task Capture(string label)
         {
@@ -51,6 +53,14 @@ internal static class WeatherCardChecks
         await Script("document.querySelector('#refresh').click(); import('./app.js').then(module => window.__cardEngine = module.engine)");
         await WaitFor("!!window.__cardEngine && document.querySelector('#temperature').textContent === '18' && document.querySelector('#status').textContent.startsWith('更新')", "Weather Card must render API fixture");
         Check(await Script("document.querySelectorAll('#hourly li time[datetime]').length === 5") == "true", "Five genuine future hours");
+        string initialDocument = await Script("performance.timeOrigin");
+        string folder = Path.Combine(manager.WidgetsRoot, "weather-card"); DateTime originalDirectoryTime = Directory.GetLastWriteTimeUtc(folder);
+        Directory.SetLastWriteTimeUtc(folder, originalDirectoryTime.AddSeconds(5)); await Task.Delay(700);
+        Check(window.BrowserReloadCount == 0 && await Script("performance.timeOrigin") == initialDocument, "Directory metadata changes must not reload widgets");
+        Directory.SetLastWriteTimeUtc(folder, originalDirectoryTime);
+
+        window.RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent)); await Task.Delay(150);
+        Check(window.BrowserInitializationCount == 1 && await Script("performance.timeOrigin") == initialDocument && await Script("!!window.__cardEngine") == "true", "Repeated WPF Loaded must not reinitialize or navigate the browser; init=" + window.BrowserInitializationCount + "; reload=" + window.BrowserReloadCount + "; navigation=" + window.BrowserNavigationCount + "; before=" + initialDocument + "; after=" + await Script("performance.timeOrigin") + "; engine=" + await Script("!!window.__cardEngine"));
         int dragMessages = 0;
         EventHandler<CoreWebView2WebMessageReceivedEventArgs> observeDrag = (_, args) =>
         {
