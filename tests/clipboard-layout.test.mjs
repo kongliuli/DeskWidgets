@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const source=await readFile(new URL('../widgets/clipboard-cache/layout.js',import.meta.url),'utf8');
+const {layoutFor}=await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+const text=Array.from({length:50},()=>({kind:'text'})),images=Array.from({length:50},()=>({kind:'image'}));
+assert.equal(layoutFor(300,220,text).count,4);assert.equal(layoutFor(300,220,images).count,4);
+assert.ok(layoutFor(820,500,images).count>layoutFor(300,220,images).count);
+assert.equal(layoutFor(820,500,images,3).count,3);assert.ok(layoutFor(5000,5000,text).count<=100);
+assert.equal(layoutFor(0,0,[]).count,0);assert.equal(layoutFor(0,0,text).count,1);
+assert.equal(layoutFor(1200,220,images).columns,1);assert.equal(layoutFor(1200,220,images).count,layoutFor(300,220,images).count);
+console.log('PASS: single-column fixed rows, width independence, manual upper cap and empty/tiny/large sizes');

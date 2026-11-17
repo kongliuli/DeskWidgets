@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Authors>kongliuli</Authors>
+    <Description>Extensible Windows desktop widgets with WPF and WebView2.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/kongliuli/DeskWidgets</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <EffectiveTargetPlatformVersion>10.0.17763.0</EffectiveTargetPlatformVersion>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <LangVersion>14</LangVersion>
+    <ApplicationIcon>assets\deskwidgets.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="LICENSE;THIRD-PARTY-NOTICES.md;README.md;CHANGELOG.md;START-HERE.zh-CN.txt;docs\component-center.md;docs\design\unified-component-center-v1.png;licenses\**\*"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory><CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory></None>
+    <Resource Include="assets\deskwidgets.ico" />
+    <Resource Include="assets\deskwidgets-mark.png" />
+    <None Update="assets\deskwidgets.ico"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory><CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory></None>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4314.35" />
+    <None Update="widgets\**\*"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory><CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory></None>
+  </ItemGroup>
+</Project>

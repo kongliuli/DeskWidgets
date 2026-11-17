@@ -1,0 +1,30 @@
+name: Build and frontend checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+      - name: Build Windows host
+        shell: pwsh
+        run: dotnet build -c Release --artifacts-path "$env:RUNNER_TEMP/DeskWidgets-artifacts"
+      - name: Run frontend assertions
+        shell: pwsh
+        run: |
+          Get-ChildItem tests/*.mjs | ForEach-Object {
+            node --test $_.FullName
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }

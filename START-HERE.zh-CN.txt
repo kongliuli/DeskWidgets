@@ -1,0 +1,15 @@
+DeskWidgets v0.1.0 — Windows x64
+
+1. 完整解压 ZIP 到当前用户可写目录，运行 DeskWidgets.exe。
+2. 已包含 .NET 运行时；仍需 Microsoft Edge WebView2 Evergreen Runtime。
+   官方安装入口：https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+3. 双击托盘图标打开组件中心；右键菜单可加载、锁定、排列、重载和退出。
+4. 世界时钟和天气支持多实例，新建时选择时区/城市。
+5. 剪贴板需打开对应组件才采集，退出清空临时缓存；单击复制后手动粘贴。
+6. 全屏时组件会休眠，退出全屏后恢复。普通最大化不应触发。
+7. 更新前退出旧版本，并备份 config.json、notes-history.json 与
+   %LOCALAPPDATA%\DeskWidgets\WebView2。不要只覆盖 EXE。
+
+源码、说明、问题反馈与 Release：https://github.com/kongliuli/DeskWidgets
+MIT 许可证见 LICENSE；第三方声明见 THIRD-PARTY-NOTICES.md。
+首个公开版本未签名，部分 Windows/显卡/混合 DPI/全屏组合仍需实际验证。

@@ -1,0 +1,29 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "utc",
+      "prompt": "Use case: stylized-concept. Asset type: production background artwork for a small Windows desktop clock, landscape 1536x1024. Create a sophisticated cinematic Earth-at-night orbital view, deep ink navy and faint cyan atmosphere. A small graceful curve of Earth and scattered warm city lights occupies the bottom quarter and lower right, the upper 65 percent and left-center are quiet very dark blue negative space for real white clock text added later. Restrained realistic photography-like rendering, fine atmospheric haze, beautiful material depth, no busy stars. Edge-to-edge full background artwork only. No text, no numbers, no clock face, no UI, no card, no borders, no watermark."
+    },
+    {
+      "name": "beijing",
+      "prompt": "Use case: stylized-concept. Asset type: production background artwork for a small Windows desktop Beijing clock, landscape 1536x1024. Elegant cinematic night view of Beijing's Temple of Heaven, accurate recognizable circular blue-roofed Hall of Prayer for Good Harvests, softly illuminated warm gold, quiet blue-black sky and very faint atmospheric haze. Architecture and ground occupy the lower 30 percent, primary temple slightly right of center, upper 65 percent and left-center remain clean dark negative space for real white clock text later. Premium photography-like matte imagery, restrained colors, atmospheric depth. Edge-to-edge background artwork only, no text, no numbers, no clock face, no UI, no borders, no watermark."
+    },
+    {
+      "name": "new-york",
+      "prompt": "Use case: stylized-concept. Asset type: production background artwork for a small Windows desktop New York clock, landscape 1536x1024. Cinematic Manhattan skyline at blue-hour night, recognizable Empire State Building among warm glowing office windows and deep indigo buildings, a quiet subtle waterfront reflection along the very bottom. Skyline occupies the lower quarter to third, tall landmark slightly right of center, upper 65 percent and left-center are calm deep navy negative space reserved for white clock text. Premium photographic realism, delicate haze, subdued elegant contrast and very little visual noise. Background artwork only, no text, no numbers, no logos, no UI, no borders, no watermark."
+    },
+    {
+      "name": "los-angeles",
+      "prompt": "Use case: stylized-concept. Asset type: production background artwork for a small Windows desktop Los Angeles clock, landscape 1536x1024. Refined cinematic Los Angeles blue-hour night cityscape: distinctive slender palm silhouettes at the outer edges, warm amber street lights and distant downtown lights in the bottom quarter, muted dusty violet horizon blending into deep midnight blue. Clean open dark upper 65 percent and left-center for white clock text to be added later. Atmospheric photography-like treatment, subtle haze, rich restrained tones, recognizable California character, no bright sun. Full edge-to-edge background only, no text, no numbers, no signs, no UI, no borders, no watermark."
+    },
+    {
+      "name": "clouds",
+      "prompt": "Use case: photorealistic-natural. Asset type: production background artwork for a responsive desktop weather widget, landscape 1536x1024. A serene sophisticated blue sky with luminous soft white cumulus clouds, fine naturally feathered edges and subtle volumetric gradients rather than flat cartoon shapes. Build layered atmospheric depth: smaller high clouds in upper-right, larger banks near bottom and outer right edges, open tranquil blue negative space through left and center for white weather information added later. Palette muted azure, slate blue, pale silver-white; gentle sun glow from upper right without a visible hard sun disk. Moderately subdued exposure so white UI stays readable after a soft dark overlay. Edge-to-edge sky artwork, no land, no text, no numbers, no UI, no weather symbols, no borders, no watermark."
+    },
+    {
+      "name": "almanac",
+      "prompt": "Use case: stylized-concept. Asset type: production background artwork for a Chinese almanac desktop widget, landscape 1536x1024, composed to also crop into a tall portrait. Modern restrained Chinese ink landscape, deep jade-black atmosphere, layered misty mountains and subtle mineral-paper texture, a faint warm ivory moon toward upper right. Mountains stay mainly in the lower quarter and outer right edge; central 60 percent and upper-left remain quiet dark jade negative space for real Chinese calendar text to be added later. Premium subtle gold-gray brush edges, contemplative and elegant, low visual noise. Full bleed background artwork only, no calligraphy, no Chinese characters, no numbers, no calendar, no UI, no ornamental border, no watermark."
+    }
+  ]
+}

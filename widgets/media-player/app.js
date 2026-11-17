@@ -1,0 +1,4 @@
+import {$,widget,send} from 'https://assets.widgets.local/utility.js';
+function subscribe(){send('subscribeMedia',{enabled:!document.hidden});}document.addEventListener('visibilitychange',subscribe);window.addEventListener('pagehide',()=>send('subscribeMedia',{enabled:false}));
+widget.querySelectorAll('[data-command]').forEach(button=>button.onclick=()=>send('mediaCommand',{command:button.dataset.command}));
+window.chrome?.webview?.addEventListener('message',({data})=>{if(data.type!=='mediaState')return;$('title').textContent=data.title||'暂无播放';$('artist').textContent=data.artist||'';$('source').textContent=data.source||'系统媒体会话';$('status').textContent=data.status;$('toggle').textContent=data.playing?'暂停':'播放';widget.querySelectorAll('[data-command]').forEach(button=>button.disabled=!data.available||widget.classList.contains('locked'));});subscribe();

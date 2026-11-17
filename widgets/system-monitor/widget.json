@@ -1,0 +1,1 @@
+{"name":"系统资源 · CPU GPU 内存","defaultWidth":360,"defaultHeight":240,"minWidth":260,"minHeight":180,"settings":{"layout":"bars","cpu":true,"gpu":true,"memory":true,"paused":false,"background":{"type":"none"}}}

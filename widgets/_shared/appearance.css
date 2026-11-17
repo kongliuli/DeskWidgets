@@ -1,0 +1,23 @@
+.appearance-controls { margin: 10px 0 14px; padding: 8px 0; border: 0; border-bottom: 1px solid #ffffff20; min-width: 0; }
+.appearance-controls legend { font-size: 12px; font-weight: 600; padding: 0; color: #e9f5ff; }
+.appearance-controls label { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px; margin: 9px 0; font-size: 11px; }
+.appearance-controls output { color: #b5def9; font-variant-numeric: tabular-nums; }
+.appearance-controls input[type=range] { grid-column: 1 / -1; min-width: 0; width: 100%; height: 18px; padding: 0; margin: 0; background: transparent; border: 0; cursor: ew-resize; accent-color: #9bd3f5; }
+.appearance-controls p { margin: 7px 0 0; color: #b7cbdc; font-size: 10px; line-height: 1.5; }
+.widget-settings .error:empty, .appearance-dialog .appearance-error:empty { display: none; }
+.background-glass { position: absolute; inset: 0; pointer-events: none; z-index: 1; background: #0a142522; backdrop-filter: blur(var(--glass-blur,8px)) saturate(135%); box-shadow: inset 0 1px #ffffff1a, inset 0 -1px #00000015; }
+[data-glass=off] .background-glass { display: none; }
+[data-background-hidden=true] .widget-surface { visibility: hidden; }
+[data-background-hidden=true] .content { filter: drop-shadow(0 1px 1px #000a); }
+[data-background-hidden=true] .cloud-layer, [data-background-hidden=true] .scene::after { animation-play-state: paused !important; }
+@container (max-height: 180px) {
+  .widget-settings, .appearance-dialog { padding: 8px; }
+  .widget-settings h2, .appearance-dialog h2 { font-size: 12px; margin: 0 0 3px; }
+  .appearance-controls { margin: 0 0 4px; padding: 0 0 4px; }
+  .appearance-controls legend, .appearance-controls p { display: none; }
+  .appearance-controls label { grid-template-columns: 60px minmax(0,1fr) 30px; gap: 3px; margin: 2px 0; font-size: 10px; }
+  .appearance-controls output { grid-column: 3; grid-row: 1; font-size: 9px; text-align: right; }
+  .appearance-controls input[type=range] { grid-column: 2; grid-row: 1; height: 16px; }
+  .widget-settings .actions, .appearance-actions { position: sticky; bottom: -8px; background: #142238f7; margin-top: 2px; padding: 2px 0; }
+  .widget-settings .actions button, .appearance-actions button { padding: 4px 8px; }
+}

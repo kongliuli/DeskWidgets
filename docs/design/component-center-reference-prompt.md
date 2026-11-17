@@ -1,0 +1,7 @@
+# 组件中心视觉参考
+
+使用内置 imagegen 生成，参考图 component-center-reference-v1.png。实际实现为 WPF 原生控件，卡片内功能摘要不使用生成图中的示例数据。图标为可缩放原生矢量线条图标；托盘四块拼合标识由确定性绘图生成多分辨率 ICO。
+
+最终生成提示词：
+
+Use case: ui-mockup. High fidelity Windows desktop app UI design reference, DeskWidgets component center, 1100x800 landscape. Entire interface in Chinese, dark slate navy calm frosted surfaces, restrained icy blue and mint accents. Header at top with distinctive 2x2 asymmetric rounded tile app logo, '组件中心', compact subtitle '让桌面各就其位'. Search input and compact filters 全部 已开启 未开启. Single scrollable masonry-like flowing 3-column grid of widget catalog cards, NO sidebar, NO tabs separating running and catalog. Each card shows elegant thin line category icon on tinted square, Chinese title, tiny meaningful preview illustration (clock, weather cloud, notes lines, CPU chart, calendar countdown, music waveform), status 未开启 or 已开启 1 or 已开启 2. Running cards contain compact instance rows with dimensions and discreet lock pin close controls; unopened cards show 打开组件, running show 新建实例. Visible cards 世界时钟, 天气, 黄历, 系统监控, 轻量便签, 媒体播放, 日程倒计时, 工作区入口. Premium native desktop productivity utility, precise typography, 20px spacing, clear high contrast. No fake charts/dashboard KPI headers, no neon glow, no photographic backdrop. Bottom tiny footer states cards saved locally. Include a small crisp matching app tray logo study in bottom right. Flat straight-on screen only, no device frame.

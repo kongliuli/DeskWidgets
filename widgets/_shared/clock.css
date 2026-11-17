@@ -1,0 +1,11 @@
+.clock-content { justify-content: space-between; gap: 8px; }
+.city { font-size: clamp(13px, 5cqw, 28px); font-weight: 550; text-shadow: 0 1px 10px #0009; }
+.clock-time { font-family: "Cascadia Mono", Consolas, monospace; font-size: clamp(30px, min(15cqw, 38cqh), 190px); font-weight: 400; letter-spacing: -.065em; line-height: 1; white-space: nowrap; color: #e9f6ff; text-shadow: 0 2px 18px #050d16a0; }
+.clock-time .seconds { color: #a5dfff; }
+.clock-meta { display: flex; justify-content: space-between; gap: 8px; font-size: clamp(10px, 3.7cqw, 24px); color: #c1d3e6; }
+.zone { font-size: .85em; color: #a7bdd3; }
+@container (max-height: 135px) { .content { padding: 12px 16px; gap: 3px; } .city { font-size: 12px; } .clock-time { font-size: min(15cqw, 35cqh); } .clock-meta { font-size: 10px; } }
+
+.zone-picker{font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:5px;padding:1px 2px;max-width:100%;cursor:pointer;text-shadow:inherit}.zone-picker:hover{border-color:#ffffff35;background:#ffffff08}.zone-picker option{background:#192a3d;color:#edf5ff}
+
+.city-label{display:none}.locked .city-label{display:inline}.locked .zone-picker{display:none}

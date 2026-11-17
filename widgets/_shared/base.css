@@ -1,0 +1,44 @@
+@import url('appearance.css');
+:root { color-scheme: dark; font-family: "Segoe UI Variable", "Segoe UI", "Microsoft YaHei UI", sans-serif; color: #eef3fa; font-variant-numeric: tabular-nums; }
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: transparent; border: 0; padding: 0; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
+.widget { width: 100%; height: 100%; position: relative; overflow: hidden; border-radius: 16px; border: 1px solid #ffffff20; background: rgba(12,20,30,.004); box-shadow: inset 0 1px #ffffff12; user-select: none; container-type: size; isolation: isolate; }
+.widget-surface { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: var(--surface-alpha,.85); overflow: hidden; border-radius: inherit; }
+.background, .background > *, .shade { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.background { z-index: 0; overflow: hidden; background: rgba(18,20,26,.72); }
+.background img, .background video { object-fit: cover; }
+.background .scene { background-position: center bottom; background-size: cover; }
+.background .scene::after { content: ''; position: absolute; inset: -30% -50%; background: radial-gradient(ellipse at 30% 25%, #b3cde518, transparent 34%), radial-gradient(ellipse at 65% 40%, #d4e6f512, transparent 28%); animation: drift 45s steps(900,end) infinite alternate; }
+.background .scene:not(.clouds)::after { animation: none; }
+.scene.clouds::after { inset: 0; background: linear-gradient(180deg, transparent 35%, #dcebf214); animation: none; }
+.cloud-layer { position: absolute; left: 0; width: 200%; height: 72%; background: url('backgrounds/cloud-layer-v1.png') repeat-x left center / 50% 100%; animation: cloud-pass 80s linear infinite; will-change: transform; }
+.cloud-layer.far { top: -10%; opacity: .12; animation-duration: 130s; animation-delay: -32s; animation-timing-function: steps(2600,end); }
+.cloud-layer.middle { top: 12%; opacity: .18; animation-duration: 95s; animation-delay: -54s; animation-timing-function: steps(1900,end); }
+.cloud-layer.near { top: 42%; opacity: .24; animation-duration: 65s; animation-delay: -17s; animation-timing-function: steps(1300,end); }
+@keyframes cloud-pass { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.shade { z-index: 2; background: linear-gradient(180deg, #080e1860, #080e1810 45%, #080e1880); }
+.tools { position: absolute; top: 7px; right: 8px; display: flex; gap: 3px; z-index: 5; opacity: 0; transition: opacity .15s; }
+.widget:hover .tools, .widget:focus-within .tools { opacity: 1; }
+.tools button { display: grid; place-items: center; width: 23px; height: 22px; border-radius: 6px; background: #0a111a70; color: #d4e3f4; }
+.tools button:hover, .tools button[aria-pressed=true] { background: #ffffff24; color: #7dd3fc; }
+.widget.locked .tools { opacity: 1; }
+.widget.locked .tools button:not([data-action=toggleLock]), .widget.locked .functional-controls { display: none; }
+.widget.locked .content button { cursor: default; }
+.tools svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.tools [data-action=closeWidget]:hover { color: #fda4af; }
+.content { height: 100%; padding: clamp(14px, 6cqw, 32px); display: flex; flex-direction: column; position: relative; z-index: 1; text-shadow: 0 1px 3px #000c; }
+.muted { color: #b5c4d5; }
+.caption { font-size: clamp(10px, 4cqw, 18px); }
+.error { color: #fecaca; font-size: 12px; }
+dialog { position: absolute; max-width: calc(100% - 14px); max-height: calc(100% - 14px); width: 340px; margin: auto; padding: 16px; border-radius: 12px; border: 1px solid #ffffff30; background: #151f2ef5; color: #edf5ff; font-size: 12px; overflow: auto; user-select: text; }
+dialog::backdrop { background: #050b18a0; }
+dialog h2 { font-size: 15px; margin: 0 0 12px; }
+dialog label { display: grid; gap: 5px; margin: 10px 0; }
+dialog input, dialog select { width: 100%; min-width: 0; border-radius: 5px; border: 1px solid #ffffff30; background: #09121c; padding: 6px; }
+dialog .actions { display: flex; justify-content: flex-end; gap: 14px; margin-top: 14px; }
+dialog .actions button { padding: 6px 10px; border-radius: 5px; background: #ffffff12; }
+@keyframes drift { to { transform: translateX(20%) translateY(5%); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

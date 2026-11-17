@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weather Card</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main class="weather-card" data-scene="overcast" data-day="true" aria-label="实时天气">
+  <div class="widget-surface" aria-hidden="true"><div class="weather-sky"></div><canvas id="atmosphere"></canvas><div class="background-glass"></div><div class="readability"></div></div>
+  <nav class="tools" aria-label="挂件控制">
+    <button id="lock-widget" data-action="toggleLock" title="锁定组件" aria-label="锁定组件" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="8" width="10" height="9" rx="2"/><path d="M7 8V5a3 3 0 0 1 6 0v3"/></svg></button>
+    <button id="appearance-toggle" title="外观设置" aria-label="外观设置"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 14h14M7 3v6m6 2v6"/></svg></button>
+    <button id="preview-toggle" title="天气效果预览" aria-label="天气效果预览" aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 2h6M8 2v6l-5 8a1 1 0 0 0 1 2h12a1 1 0 0 0 1-2l-5-8V2M6 12h8"/><circle cx="9" cy="15" r=".6"/></svg></button>
+    <button id="close-widget" title="关闭挂件" aria-label="关闭挂件"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+  </nav>
+  <div class="content">
+    <div class="weather-main"><div class="local-info"><button id="city" title="搜索并切换城市">南京 <span aria-hidden="true">⌄</span></button><div id="description">正在获取天气</div><div class="micro-tags"><span id="feels">体感 --°</span><span id="humidity">湿度 --%</span><span id="wind">风速 -- km/h</span></div></div><div class="temperature" aria-label="当前温度"><span id="temperature">--</span><span class="degree">°</span></div></div>
+    <ol id="hourly" class="hourly" aria-label="未来五个整点预报"></ol>
+    <footer><button id="refresh" title="点击刷新实时天气"><span id="status" role="status">连接中…</span></button><span id="mode" class="mode">实时</span><span class="credit" title="Weather data by Open-Meteo, CC BY 4.0">Open-Meteo</span></footer>
+  </div>
+  <section id="simulator" class="simulator" aria-label="天气效果模拟器" hidden>
+    <header><strong>天气效果预览</strong><span>仅预览画面</span></header>
+    <div id="scene-options" class="scene-options"></div>
+    <div class="sim-control"><button id="day-mode" aria-pressed="true">白天</button><label for="wind-speed">风速 <output id="wind-value">0</output> km/h</label></div>
+    <input id="wind-speed" aria-label="预览风速" type="range" min="0" max="100" step="1" value="0">
+    <button id="restore-live" class="restore-live">恢复实时</button>
+  </section>
+  <dialog id="city-dialog" aria-labelledby="search-title"><h2 id="search-title">切换城市</h2><form id="city-search"><input name="query" aria-label="城市名称" placeholder="南京 / Tokyo / New York" required minlength="2" maxlength="80" autocomplete="off"><button type="submit">搜索</button><button type="button" id="cancel-search" aria-label="关闭城市搜索">×</button></form><p id="search-status" role="status">输入城市名称，选择搜索结果</p><div id="search-results"></div></dialog>
+  <dialog id="appearance-dialog" class="appearance-dialog" aria-labelledby="appearance-title"><h2 id="appearance-title">外观设置</h2><form id="appearance-form"><p class="appearance-error" role="alert"></p><div class="appearance-actions"><button type="button" id="cancel-appearance">取消</button><button type="submit">保存</button></div></form></dialog>
+</main>
+<script type="module" src="app.js"></script>
+</body></html>

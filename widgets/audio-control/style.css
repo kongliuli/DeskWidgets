@@ -1,0 +1,19 @@
+.audio [hidden] { display: none !important; }
+.content { gap: 9px; }
+header { display: flex; align-items: center; gap: 9px; font-size: clamp(13px,4.5cqw,23px); }header strong { font-weight: 550; }
+#muted-state { color: #f0c79a; font-size: 10px; }
+.volume-readout { display: flex; align-items: baseline; gap: 5px; flex: 1; min-height: 0; }
+#volume { font-size: clamp(30px,min(15cqw,27cqh),84px); font-weight: 300; letter-spacing: -.045em; line-height: 1; }
+.volume-readout small { color: #b7d2e5; font-size: clamp(11px,4cqw,21px); }
+.endpoint { margin-left: auto; font-size: 9px; color: #9fb6c9; white-space: nowrap; }
+.volume-controls { display: flex; gap: 10px; align-items: center; }
+#volume-slider { flex: 1; width: 0; min-width: 0; margin: 0; height: 17px; accent-color: #93cef1; cursor: ew-resize; }
+#mute { min-width: 44px; padding: 4px 7px; border-radius: 5px; background: #ffffff12; font-size: 10px; }
+.meter-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 9px; color: #a9bfd2; margin-bottom: 6px; }
+.meter-label strong { color: #dbeaf6; font-size: 13px; font-weight: 500; }
+.meter-track { height: clamp(5px,4cqh,12px); border-radius: 3px; overflow: hidden; background: #ffffff12; }
+#level { width: 0; height: 100%; background: linear-gradient(90deg,#7ccca9,#d9d389 70%,#f29d91); transition: width .1s linear; }
+footer { font-size: 9px; line-height: 1.4; color: #9cb2c5; }
+@container (max-height: 170px) { .content { gap: 6px; padding: 15px 16px 12px; } .endpoint { display: none; } .meter-label { margin-bottom: 4px; } footer { font-size: 8px; } }
+@container (max-height: 170px) { #volume { font-size: clamp(28px,min(14cqw,23cqh),48px); } }
+@media (prefers-reduced-motion:reduce) { #level { transition: none; } }

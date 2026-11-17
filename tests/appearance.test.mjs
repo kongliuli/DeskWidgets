@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const source=readFileSync(new URL('../widgets/_shared/appearance.js',import.meta.url),'utf8');
+const {normalizeAppearance,applyAppearance}=await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+assert.deepEqual(normalizeAppearance(null),{transparency:15,blur:8});
+assert.deepEqual(normalizeAppearance({transparency:150,blur:-5}),{transparency:100,blur:0});
+assert.deepEqual(normalizeAppearance({transparency:NaN,blur:'12'}),{transparency:15,blur:8});
+assert.deepEqual(normalizeAppearance({transparency:41.7,blur:100}),{transparency:42,blur:24});
+const variables={},events=[];
+const widget={style:{setProperty:(key,value)=>variables[key]=value},dataset:{},querySelectorAll:()=>[],dispatchEvent:event=>events.push(event.detail)};
+applyAppearance(widget,{transparency:100,blur:0});
+assert.equal(variables['--surface-alpha'],'0');assert.equal(widget.dataset.backgroundHidden,'true');assert.equal(widget.dataset.glass,'off');
+applyAppearance(widget,{transparency:40,blur:16});
+assert.equal(variables['--surface-alpha'],'0.6');assert.equal(variables['--glass-blur'],'16px');assert.equal(widget.dataset.backgroundHidden,'false');assert.equal(widget.dataset.glass,'on');assert.equal(events.length,2);
+console.log('PASS: appearance defaults, range/type validation, background-only alpha, glass off/on, visibility event');

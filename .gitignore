@@ -1,0 +1,27 @@
+bin/
+obj/
+.scratch/
+.vs/
+config.json
+*.log
+input-trace.jsonl
+
+notes-history.json
+notes-history.json.bak
+notes-history.json.tmp
+
+# Personal state and generated artifacts
+artifacts/
+publish/
+releases/
+TestResults/
+test-profiles/
+*.user
+*.suo
+config.json.tmp
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.key

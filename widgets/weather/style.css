@@ -1,0 +1,23 @@
+header { display: grid; gap: 6px; }
+.weather .shade { background: linear-gradient(180deg, #071e3659, #071e3640 42%, #071927bb); }
+#city { justify-self: start; font-size: clamp(15px, 5.5cqw, 28px); font-weight: 550; }
+#city span { color: #c5deee; font-size: .8em; }
+#condition { color: #d4e4ef; }
+.temperature { display: flex; align-items: baseline; margin: auto 0 4px; text-shadow: 0 2px 20px #10223280; }
+.temperature strong { font-size: clamp(44px, min(23cqw, 30cqh), 180px); font-weight: 300; line-height: 1.1; letter-spacing: -.07em; }
+.temperature > span { font-size: clamp(18px, 8cqw, 45px); font-weight: 300; margin-left: 7px; }
+.range { color: #dce9f3; }
+.details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 12px; margin-top: auto; }
+.details div { display: grid; gap: 3px; }
+.details small { color: #bed0de; font-size: clamp(10px, 3.3cqw, 16px); }
+.details span { font-size: clamp(12px, 4cqw, 22px); }
+footer { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 9px; color: #b3c8d7; padding-top: 12px; }
+#refresh { color: #e3f2ff; }
+.credit { margin-left: auto; }
+#city-results { display: grid; gap: 6px; }
+#city-results button { padding: 9px; background: #ffffff0b; border-radius: 6px; text-align: left; }
+.weather[data-condition=rain] .scene::before { content: ''; position: absolute; inset: -50%; background: repeating-linear-gradient(110deg, transparent 0 35px, #dceeff22 36px 37px, transparent 38px 70px); animation: rain 1s linear infinite; opacity: .35; }
+.weather[data-night=true] .background { filter: brightness(.52) saturate(.7); }
+@keyframes rain { to { transform: translate(-25px, 70px); } }
+@container (max-height: 220px) { .content { padding: 15px 18px; } header { gap: 3px; } .details { display: none; } .temperature { margin-top: auto; } footer { padding-top: 7px; } .credit { display: none; } }
+@container (max-height: 180px) { header { display: flex; align-items: baseline; justify-content: space-between; } .temperature strong { font-size: 54px; } .caption { font-size: 11px; } }
