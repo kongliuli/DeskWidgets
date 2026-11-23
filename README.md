@@ -74,7 +74,10 @@ Get-ChildItem tests/*.mjs | ForEach-Object { node --test $_.FullName }
 
 ## 项目结构
 
-- 根目录 C# / XAML：宿主、Win32 行为、原生数据服务及宿主集成检查。
+- `DeskWidgets.slnx` 汇总三个 SDK 风格项目。`Directory.Build.props` 统一编译设置，`Directory.Packages.props` 管理 NuGet 依赖版本。
+- `src/DeskWidgets.Core/` 包含挂件与便签模型，以及布局仓储、便签仓储、挂件目录的接口，目标框架为 `net10.0`。
+- `src/DeskWidgets.Infrastructure/` 实现 JSON 布局仓储、便签历史仓储和文件系统挂件目录，仅引用 Core。
+- `src/DeskWidgets/` 包含 WPF/WebView2 桌面宿主。`App.xaml.cs` 组装接口与实现，`Presentation/` 管理窗口和交互，`Platform/` 包含剪贴板、音频、媒体、遥测和 Win32 适配，`SelfTests/` 保留需要实际宿主进程的集成检查。
 - `widgets/`：组件前端、共享运行库和素材；兼容旧时区目录。
 - `tests/`：前端断言、独立宿主检查脚本和最小测试夹具。
 - `scripts/`：可重复执行的发布打包入口。
@@ -82,6 +85,8 @@ Get-ChildItem tests/*.mjs | ForEach-Object { node --test $_.FullName }
 - `licenses/`：第三方原始许可和声明。
 
 GitHub Actions 只运行 Windows 构建和前端断言；有交互式桌面的宿主验证需在本机运行，不用 CI 构建成功冒充 Win+D、鼠标或显卡兼容性验收。
+
+本地 Release 宿主输出位于 `src/DeskWidgets/bin/Release/net10.0-windows/`。布局与便签文件仍按可执行文件所在目录定位，使用现有 JSON 格式。
 
 ## 插件开发
 

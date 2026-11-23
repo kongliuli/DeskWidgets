@@ -3,35 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using DeskWidgets.Core;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace DeskWidgets;
 
-public sealed record WidgetDefinition(string Directory, string Name, double Width, double Height, double MinWidth, double MinHeight, bool DefaultOpen = false);
-public sealed class WidgetState
-{
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
-    public string WidgetName { get; set; } = "world-clock";
-    public double Left { get; set; } = 64;
-    public double Top { get; set; } = 64;
-    public double Width { get; set; } = 320;
-    public double Height { get; set; } = 190;
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public string? TimeZone { get; set; }
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] public WidgetCity? City { get; set; }
-    public bool Locked { get; set; }
-    public bool Topmost { get; set; }
-    internal bool IsValid() => !string.IsNullOrWhiteSpace(Id) && !string.IsNullOrWhiteSpace(WidgetName) && new[] { Left, Top, Width, Height }.All(double.IsFinite) && Width is >= 1 and <= 32768 && Height is >= 1 and <= 32768 && (TimeZone == null || WidgetKinds.ValidZone(TimeZone)) && (City == null || City.IsValid());
-}
 public sealed class WidgetManager : IDisposable
 {
     internal ClipboardService Clipboard { get; } = new();
     internal NotesService Notes { get; }
     internal MediaService Media { get; } = new();
     internal TelemetryService Telemetry { get; } = new(System.Windows.Application.Current.Dispatcher);
-    public string WidgetsRoot { get; } = Path.Combine(AppContext.BaseDirectory, "widgets");
-    private readonly string config = Path.Combine(AppContext.BaseDirectory, "config.json");
+    public string WidgetsRoot { get; }
+    private readonly IWidgetLayoutRepository layoutRepository;
+    private readonly IWidgetCatalog widgetCatalog;
     private readonly List<WidgetWindow> windows = [];
     private readonly DispatcherTimer saveTimer = new() { Interval = TimeSpan.FromMilliseconds(300) };
     private readonly DispatcherTimer reloadTimer = new() { Interval = TimeSpan.FromMilliseconds(300) };
@@ -43,10 +29,12 @@ public sealed class WidgetManager : IDisposable
     private bool writableConfig = true;
     private readonly HashSet<string> changedWidgets = new(StringComparer.OrdinalIgnoreCase);
     private bool reloadShared;
-    private static readonly JsonSerializerOptions Json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true };
-    public WidgetManager()
+    internal WidgetManager(string widgetsRoot, IWidgetCatalog widgetCatalog, IWidgetLayoutRepository layoutRepository, INoteHistoryRepository noteHistoryRepository)
     {
-        Notes = new NotesService(this);
+        WidgetsRoot = widgetsRoot;
+        this.widgetCatalog = widgetCatalog;
+        this.layoutRepository = layoutRepository;
+        Notes = new NotesService(this, noteHistoryRepository);
         Directory.CreateDirectory(WidgetsRoot);
         saveTimer.Tick += (_, _) => { saveTimer.Stop(); Save(); Changed?.Invoke(); };
         reloadTimer.Tick += (_, _) =>
@@ -74,37 +62,20 @@ public sealed class WidgetManager : IDisposable
         desktopTimer.Start();
         fullscreen = new FullscreenMonitor(SetSleeping, !App.IsSelfTest);
     }
-    public List<WidgetDefinition> Scan()
-    {
-        List<WidgetDefinition> definitions = [];
-        foreach (var folder in Directory.EnumerateDirectories(WidgetsRoot))
-        {
-            try
-            {
-                if ((File.GetAttributes(folder) & FileAttributes.ReparsePoint) != 0 || !File.Exists(Path.Combine(folder, "index.html"))) continue;
-                using var json = JsonDocument.Parse(File.ReadAllText(Path.Combine(folder, "widget.json")));
-                var root = json.RootElement;
-                double Number(string name, double fallback) => root.TryGetProperty(name, out var value) && value.TryGetDouble(out var n) && double.IsFinite(n) && n is >= 1 and <= 32768 ? n : fallback;
-                definitions.Add(new(Path.GetFileName(folder), root.GetProperty("name").GetString() ?? Path.GetFileName(folder), Number("defaultWidth", Number("width", 320)), Number("defaultHeight", Number("height", 190)), Number("minWidth", 240), Number("minHeight", 140), root.TryGetProperty("defaultOpen", out var open) && open.ValueKind == JsonValueKind.True));
-            }
-            catch (Exception error) when (error is IOException or UnauthorizedAccessException or JsonException or KeyNotFoundException or InvalidOperationException) { System.Diagnostics.Trace.WriteLine(error); }
-        }
-        return definitions;
-    }
+    public List<WidgetDefinition> Scan() => widgetCatalog.Scan();
     public List<WidgetDefinition> Catalog() => Scan().GroupBy(d => WidgetKinds.Family(d.Directory)).Select(group => group.FirstOrDefault(d => d.Directory == group.Key) ?? group.First()).ToList();
     public void Restore()
     {
         Notes.Restore();
         var definitions = Scan();
-        if (!File.Exists(config))
-        {
-            foreach (var definition in definitions.Where(d => d.DefaultOpen)) Open(definition);
-            return;
-        }
         try
         {
-            var states = JsonSerializer.Deserialize<List<WidgetState>>(File.ReadAllText(config), Json) ?? throw new JsonException("配置必须是数组。");
-            if (states.Any(s => s == null || !s.IsValid()) || states.Select(s => s.Id).Distinct().Count() != states.Count) throw new JsonException("挂件配置包含无效尺寸、位置或重复 ID。");
+            var states = layoutRepository.Load();
+            if (states == null)
+            {
+                foreach (var definition in definitions.Where(d => d.DefaultOpen)) Open(definition);
+                return;
+            }
             foreach (var state in states)
             {
                 var definition = definitions.Find(d => d.Directory == state.WidgetName);
@@ -160,9 +131,7 @@ public sealed class WidgetManager : IDisposable
         if (!writableConfig) return;
         try
         {
-            string temporary = config + ".tmp";
-            File.WriteAllText(temporary, JsonSerializer.Serialize(windows.Select(w => w.State), Json));
-            File.Move(temporary, config, true);
+            layoutRepository.Save(windows.Select(w => w.State));
         }
         catch (Exception error) when (error is IOException or UnauthorizedAccessException) { App.Report(error); }
     }

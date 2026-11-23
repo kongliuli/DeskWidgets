@@ -13,11 +13,11 @@ $publishRoot = Join-Path $outputRoot 'publish'
 $artifactRoot = Join-Path $outputRoot 'artifacts'
 $logRoot = Join-Path $outputRoot 'logs'
 New-Item -ItemType Directory -Path $logRoot | Out-Null
-& $Dotnet publish (Join-Path $sourceRoot 'DeskWidgets.csproj') --configuration Release --runtime win-x64 --self-contained true --artifacts-path $artifactRoot --output $publishRoot "-p:Version=$Version" -p:TargetLatestRuntimePatch=true -p:DebugType=None -p:DebugSymbols=false 2>&1 | Tee-Object -FilePath (Join-Path $logRoot 'publish.log')
+& $Dotnet publish (Join-Path $sourceRoot 'src/DeskWidgets/DeskWidgets.csproj') --configuration Release --runtime win-x64 --self-contained true --artifacts-path $artifactRoot --output $publishRoot "-p:Version=$Version" -p:TargetLatestRuntimePatch=true -p:DebugType=None -p:DebugSymbols=false 2>&1 | Tee-Object -FilePath (Join-Path $logRoot 'publish.log')
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed: $LASTEXITCODE" }
 $runtime = Get-Content -LiteralPath (Join-Path $publishRoot 'DeskWidgets.runtimeconfig.json') -Raw | ConvertFrom-Json
 if (-not $runtime.runtimeOptions.includedFrameworks -or -not (Test-Path -LiteralPath (Join-Path $publishRoot 'coreclr.dll'))) { throw 'Expected a self-contained Windows runtime' }
-$assetFile = Get-ChildItem -LiteralPath (Join-Path $artifactRoot 'obj') -Filter project.assets.json -Recurse -File | Select-Object -First 1
+$assetFile = Get-ChildItem -LiteralPath (Join-Path $artifactRoot 'obj/DeskWidgets') -Filter project.assets.json -Recurse -File | Select-Object -First 1
 $assets = Get-Content -LiteralPath $assetFile.FullName -Raw | ConvertFrom-Json
 $packageRoots = @($assets.packageFolders.PSObject.Properties.Name)
 foreach ($framework in $runtime.runtimeOptions.includedFrameworks) {

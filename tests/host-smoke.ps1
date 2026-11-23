@@ -1,7 +1,7 @@
 param([string]$Configuration = 'Debug', [string]$BuildDirectory = '', [string[]]$ExtraArguments = @(), [string]$WorkDirectory = '', [string]$ReportDirectory = '')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
-$buildRoot = Join-Path $projectRoot "bin\$Configuration\net10.0-windows"
+$buildRoot = Join-Path $projectRoot "src\DeskWidgets\bin\$Configuration\net10.0-windows"
 if ($BuildDirectory) { $buildRoot = (Resolve-Path -LiteralPath $BuildDirectory).Path }
 $testRoot = if ($WorkDirectory) { [IO.Path]::GetFullPath($WorkDirectory) } else { Join-Path ([IO.Path]::GetTempPath()) ('DeskWidgets-smoke-' + [guid]::NewGuid().ToString('N')) }
 if (Test-Path -LiteralPath $testRoot) { throw "Test work directory already exists: $testRoot" }

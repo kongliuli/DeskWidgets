@@ -47,7 +47,7 @@ internal static class NotesLayoutChecks
         string historyPath = Path.Combine(AppContext.BaseDirectory, "notes-history.json");
         var saved = JsonSerializer.Deserialize<SavedNote[]>(File.ReadAllText(historyPath))!;
         Check(saved.Length == 1 && saved[0].Pinned && saved[0].Text.Contains("<script>"), "Pinned content persists as plain text, not HTML");
-        using (var recovered = new NotesService(manager)) { recovered.Restore(); Check(recovered.Windows.Count == 1, "Desktop note restores from persisted history"); }
+        using (var recovered = new NotesService(manager, App.CreateNoteHistoryRepository())) { recovered.Restore(); Check(recovered.Windows.Count == 1, "Desktop note restores from persisted history"); }
         var original = manager.OpenWindows.Select(w => (Window: w, Rect: Bounds(w))).ToArray();
         manager.ShrinkAll(); await Task.Delay(100);
         foreach (var item in original)

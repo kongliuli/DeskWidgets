@@ -22,7 +22,7 @@ internal sealed class WidgetCreateDialog : Window
         var root = new StackPanel { Margin = new Thickness(24) }; Content = root;
         root.Children.Add(new TextBlock { Text = clock ? "选择这张时钟的地区" : "选择这张天气卡的城市", FontSize = 20 });
         root.Children.Add(choices);
-        if (clock) foreach (var zone in WidgetKinds.Zones) choices.Items.Add(new ComboBoxItem { Content = zone.Name, Tag = zone.Zone });
+        if (clock) foreach (var zone in WidgetZones.Entries) choices.Items.Add(new ComboBoxItem { Content = zone.Name, Tag = zone.Zone });
         else
         {
             foreach (var city in new[] { new WidgetCity("南京",32.0603,118.7969), new("北京",39.9042,116.4074), new("上海",31.2304,121.4737), new("广州",23.1291,113.2644), new("深圳",22.5431,114.0579), new("纽约",40.7128,-74.006), new("洛杉矶",34.0522,-118.2437), new("伦敦",51.5074,-.1278), new("东京",35.6762,139.6503) }) choices.Items.Add(new ComboBoxItem { Content = city.Name, Tag = city });

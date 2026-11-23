@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DeskWidgets/DeskWidgets.csproj" />
+    <Project Path="src/DeskWidgets.Core/DeskWidgets.Core.csproj" />
+    <Project Path="src/DeskWidgets.Infrastructure/DeskWidgets.Infrastructure.csproj" />
+  </Folder>
+</Solution>

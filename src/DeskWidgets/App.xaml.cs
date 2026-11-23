@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
+using DeskWidgets.Infrastructure;
+
 namespace DeskWidgets;
 
 public partial class App : Application
@@ -50,12 +52,26 @@ public partial class App : Application
             // The UI-thread queue outlives every WebView; individual widgets must not own it.
             compositionQueue = Win32Interop.CreateCompositionQueue();
             if (IsSelfTest) { HostChecks.Run(); return; }
-            manager = new WidgetManager();
+            manager = CreateWidgetManager();
             tray = new TrayService(manager);
             manager.Restore();
         }
         catch (Exception error) { Report(error); Shutdown(1); }
     }
+    internal static WidgetManager CreateWidgetManager()
+    {
+        string root = AppContext.BaseDirectory;
+        string widgetsRoot = Path.Combine(root, "widgets");
+        return new WidgetManager(
+            widgetsRoot,
+            new FileWidgetCatalog(widgetsRoot),
+            new JsonWidgetLayoutRepository(Path.Combine(root, "config.json")),
+            CreateNoteHistoryRepository());
+    }
+
+    internal static JsonNoteHistoryRepository CreateNoteHistoryRepository() =>
+        new(Path.Combine(AppContext.BaseDirectory, "notes-history.json"));
+
     internal static void Report(Exception error)
     {
         try { File.AppendAllText(Path.Combine(AppContext.BaseDirectory, "DeskWidgets.log"), $"{DateTimeOffset.Now:O} {error}\n"); }

@@ -29,7 +29,7 @@ internal static class HostChecks
             state.Left = -1920; Check(state.IsValid(), "Support negative monitor position");
             state.Width = -1; Check(!state.IsValid(), "Reject invalid size");
             File.WriteAllBytes(Path.Combine(AppContext.BaseDirectory, "widgets", "world-clock", "background-test.gif"), Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"));
-            manager = new WidgetManager(); manager.Restore();
+            manager = App.CreateWidgetManager(); manager.Restore();
             if (Environment.GetCommandLineArgs().Contains("--image-sleep-only") || Environment.GetCommandLineArgs().Contains("--unified-only") || Environment.GetCommandLineArgs().Contains("--clipboard-only") || Environment.GetCommandLineArgs().Contains("--weather-only"))
             {
                 if (Environment.GetCommandLineArgs().Contains("--unified-only")) await UnifiedWidgetChecks.Run(manager); else if (Environment.GetCommandLineArgs().Contains("--weather-only")) await WeatherCardChecks.Run(manager); else if (Environment.GetCommandLineArgs().Contains("--clipboard-only")) await ClipboardResizeChecks.Run(manager); else await ImageSleepChecks.Run(manager); await manager.WaitForWindowsAsync(); manager.Dispose();
@@ -244,7 +244,7 @@ internal static class HostChecks
             Check(persisted, "Debounced state persistence");
             string id = window.State.Id;
             await manager.WaitForWindowsAsync();
-            manager.Dispose(); manager = new WidgetManager(); manager.Restore();
+            manager.Dispose(); manager = App.CreateWidgetManager(); manager.Restore();
             var restored = Application.Current.Windows.OfType<WidgetWindow>().Single(w => w.State.Id == id);
             Check(restored.State.Locked && restored.Width == 400, "Restore individual instance state");
             await manager.WaitForWindowsAsync();

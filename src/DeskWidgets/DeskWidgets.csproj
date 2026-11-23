@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Authors>kongliuli</Authors>
+    <Description>Extensible Windows desktop widgets with WPF and WebView2.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/kongliuli/DeskWidgets</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
+    <EffectiveTargetPlatformVersion>10.0.17763.0</EffectiveTargetPlatformVersion>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>..\..\assets\deskwidgets.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE;..\..\THIRD-PARTY-NOTICES.md;..\..\README.md;..\..\CHANGELOG.md;..\..\START-HERE.zh-CN.txt">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <Resource Include="..\..\assets\deskwidgets.ico" Link="assets\deskwidgets.ico" />
+    <Resource Include="..\..\assets\deskwidgets-mark.png" Link="assets\deskwidgets-mark.png" />
+    <None Include="..\..\assets\deskwidgets.ico" Link="assets\deskwidgets.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <PackageReference Include="Microsoft.Web.WebView2" />
+    <ProjectReference Include="..\DeskWidgets.Core\DeskWidgets.Core.csproj" />
+    <ProjectReference Include="..\DeskWidgets.Infrastructure\DeskWidgets.Infrastructure.csproj" />
+    <None Include="..\..\docs\component-center.md" Link="docs\component-center.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\docs\design\unified-component-center-v1.png" Link="docs\design\unified-component-center-v1.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\licenses\**\*" Link="licenses\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\widgets\**\*" Link="widgets\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+</Project>

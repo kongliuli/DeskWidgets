@@ -172,7 +172,7 @@ public partial class WidgetWindow : Window
             switch (type.GetString())
             {
                 case "widgetContext":
-                    if (WidgetKinds.Family(State.WidgetName) == "world-clock" && json.RootElement.TryGetProperty("timeZone", out var selectedZone) && selectedZone.ValueKind == JsonValueKind.String && WidgetKinds.ValidZone(selectedZone.GetString()) && State.TimeZone != selectedZone.GetString())
+                    if (WidgetKinds.Family(State.WidgetName) == "world-clock" && json.RootElement.TryGetProperty("timeZone", out var selectedZone) && selectedZone.ValueKind == JsonValueKind.String && WidgetZones.IsValid(selectedZone.GetString()) && State.TimeZone != selectedZone.GetString())
                     { State.TimeZone = selectedZone.GetString(); Title = "世界时钟 · " + WidgetKinds.Context(State); manager.ScheduleSave(); }
                     if (WidgetKinds.Family(State.WidgetName) == "weather-card" && json.RootElement.TryGetProperty("city", out var selectedCity) && selectedCity.ValueKind == JsonValueKind.Object)
                     { var city = JsonSerializer.Deserialize<WidgetCity>(selectedCity.GetRawText(), MessageJson); if (city != null && city.IsValid() && State.City != city) { State.City = city; Title = "天气 · " + city.Name; manager.ScheduleSave(); } }
